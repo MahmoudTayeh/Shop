@@ -4,8 +4,8 @@ from .models import CustomUser
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ('name', 'phone_number', 'email', 'address', 'is_manager','created_at')
-    search_fields = ('name', 'email','phone_number',)
+    list_display = ('username', 'phone_number', 'email', 'address', 'is_manager','created_at')
+    search_fields = ('username', 'email','phone_number',)
     #  list_editable = ('phone_number', 'email', 'address', 'is_manager',)
     ordering = ('-created_at',)
     readonly_fields = ('created_at',)

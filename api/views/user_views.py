@@ -3,17 +3,17 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
-from .selectors import customUser_list
+from api.selectors.user_selectors import customUser_list
 # Create your views here.
 
 class UserListApi(APIView):
     class OutputSerializer(serializers.Serializer):
-        name = serializers.CharField()
+        username = serializers.CharField()
         email = serializers.EmailField()
         phone_number = serializers.CharField()
         created_at = serializers.DateTimeField()
     class FilterSerializer(serializers.Serializer):
-        name = serializers.CharField(required=False)
+        username = serializers.CharField(required=False)
         email = serializers.EmailField(required=False)
     def get (self, request):
         filters_serializer = self.FilterSerializer(data= request.query_params)
