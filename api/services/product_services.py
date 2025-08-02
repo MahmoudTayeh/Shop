@@ -11,3 +11,7 @@ def product_delete(pk):
     product = product_get(pk)
     if product : product.delete()
     return product
+
+def product_create(data:dict):
+    product = Product.objects.create(**data)
+    
