@@ -4,9 +4,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
 from api.selectors.user_selectors import customUser_list
+from api.permissions import IsManager
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class UserListApi(APIView):
+    permission_classes=[IsAuthenticated,IsManager]
     class OutputSerializer(serializers.Serializer):
         username = serializers.CharField()
         email = serializers.EmailField()

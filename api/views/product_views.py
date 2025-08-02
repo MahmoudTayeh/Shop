@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from api.selectors.product_selectors import product_list
 from api.services.product_services import product_update
 from rest_framework import status
-
+from rest_framework.permissions import IsAuthenticated
+from api.permissions import IsManager
 class ProductListApi(APIView):
     class OutputSerializer(serializers.Serializer):
         name = serializers.CharField()
@@ -31,6 +32,7 @@ class ProductListApi(APIView):
     
 class ProductUpdateApi(APIView):
     
+    permission_classes=[IsAuthenticated,IsManager]
     class InputSerializer(serializers.Serializer):
         name = serializers.CharField(required=False)
         description = serializers.CharField(required=False)
@@ -52,3 +54,4 @@ class ProductUpdateApi(APIView):
         )
         output_serializer = self.OutputSerializer(product)
         return Response(output_serializer.data, status=status.HTTP_200_OK)
+
