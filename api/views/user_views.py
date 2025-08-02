@@ -6,6 +6,7 @@ from rest_framework import serializers
 from api.selectors.user_selectors import customUser_list
 from api.permissions import IsManager
 from rest_framework.permissions import IsAuthenticated
+from api.services.user_services import customUser_delete
 # Create your views here.
 
 class UserListApi(APIView):
@@ -24,3 +25,13 @@ class UserListApi(APIView):
         users_qs = customUser_list(filters=filters_serializer.validated_data)
         output_serializer = self.OutputSerializer(users_qs, many=True)
         return Response(output_serializer.data, status=status.HTTP_200_OK)
+
+class UserDeleteApi(APIView):
+    permission_classes=[IsAuthenticated,IsManager]
+    
+    def delete(self,request,pk):
+        user =customUser_delete(pk)
+        if not user:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(f"{user.username} deleted successfuly!! ", status=status.HTTP_200_OK)
+        

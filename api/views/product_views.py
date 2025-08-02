@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import serializers
 from rest_framework.response import Response
 from api.selectors.product_selectors import product_list
-from api.services.product_services import product_update
+from api.services.product_services import product_update,product_delete
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from api.permissions import IsManager
@@ -30,7 +30,7 @@ class ProductListApi(APIView):
         output_serializer = self.OutputSerializer(products_qs, many=True)
         return Response(output_serializer.data, status=status.HTTP_200_OK)
     
-class ProductUpdateApi(APIView):
+class ProductUpdateOrDeleteApi(APIView):
     
     permission_classes=[IsAuthenticated,IsManager]
     class InputSerializer(serializers.Serializer):
@@ -45,13 +45,18 @@ class ProductUpdateApi(APIView):
         price = serializers.DecimalField( max_digits=6, decimal_places=2)
         img = serializers.ImageField(required=False)
     
-    def put(self, request,product_id):
+    def put(self, request,pk):
         input_serializer = self.InputSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
         product = product_update(
-            product_id=product_id,
+            pk=pk,
             data=input_serializer.validated_data
         )
         output_serializer = self.OutputSerializer(product)
         return Response(output_serializer.data, status=status.HTTP_200_OK)
+    def delete(self,request,pk):
+        product = product_delete(pk)
+        if not product :
+            return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(f"{product.name} deleted successfuly!!")
 

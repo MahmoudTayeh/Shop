@@ -9,6 +9,9 @@ def product_list(filters=None):
             qs = qs.filter(price__icontains=filters['price'])
     return qs
 
-def product_get(product_id):
-    product = get_object_or_404(Product, id=product_id)
-    return product
+def product_get(pk):
+    try:
+        product = Product.objects.get(pk=pk)
+        return product
+    except Product.DoesNotExist:
+        return None
